@@ -13,13 +13,13 @@ import redis.clients.jedis.Jedis;
 
 
 public class WikiCrawler {
-	// keeps track of where we started
+	// the URL we started at. keeps track of where we started
 	private final String source;
 	
 	// the index where the results go
 	private JedisIndex index;
 	
-	// queue of URLs to be indexed
+	// queue of URLs to be indexed. (these URLS haven't been indexed yet)
 	private Queue<String> queue = new LinkedList<String>();
 	
 	// fetcher used to get pages from Wikipedia
@@ -54,7 +54,24 @@ public class WikiCrawler {
 	 * @throws IOException
 	 */
 	public String crawl(boolean testing) throws IOException {
+        //testing - TRUE when method called from WikiCrawlerTest, otherwise false
         // FILL THIS IN!
+        if(testing = true){
+        	//Choose and remove a URL from the queue in FIFO order.
+        	String url = queue.poll();
+        	//Read the contents of the page using WikiFetcher.readWikipedia,
+        	//It should index pages regardless of whether they are already indexed.
+        	if(url != null){
+        		Elements paragraphs = wf.readWikipedia(url); 
+        		index.indexPage(url, paragraphs);
+        		//find all the internal links on the page and add them to the queue in the order they appear. "Internal links" are links to other Wikipedia pages.
+        	}
+
+        }
+
+        else{
+
+        }
 		return null;
 	}
 	
